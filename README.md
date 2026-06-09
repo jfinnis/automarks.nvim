@@ -1,47 +1,32 @@
-# A Neovim Plugin Template
+# automarks.nvim
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ellisonleao/nvim-plugin-template/lint-test.yml?branch=main&style=for-the-badge)
-![Lua](https://img.shields.io/badge/Made%20with%20Lua-blueviolet.svg?style=for-the-badge&logo=lua)
+Automatically sets buffer-local marks on well-known exports in your code. Open a file and jump straight to the function you care about.
 
-A template repository for Neovim plugins.
+**Status: Work in progress.** Currently only supports Remix / React Router route files.
 
-## Using it
+## What it does
 
-Via `gh`:
+When you open a file inside a `routes/` directory, automarks scans for common Remix exports and places marks so you can jump to them instantly:
 
-```
-$ gh repo create my-plugin -p ellisonleao/nvim-plugin-template
-```
+| Export | Mark |
+|--------|------|
+| `loader` | l |
+| `action` | a |
+| `render` (default) | r |
+| `meta` | m |
+| `links` | c |
+|--------|------|
 
-Via github web page:
 
-Click on `Use this template`
+## Installation
 
-![](https://docs.github.com/assets/cb-36544/images/help/repository/use-this-template-button.png)
+With [lazy.nvim](https://github.com/folke/lazy.nvim):
 
-## Features and structure
-
-- 100% Lua
-- Github actions for:
-  - running tests using [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) and [busted](https://olivinelabs.com/busted/)
-  - check for formatting errors (Stylua)
-  - vimdocs autogeneration from README.md file
-  - luarocks release (LUAROCKS_API_KEY secret configuration required)
-
-### Plugin structure
-
-```
-.
-├── lua
-│   ├── plugin_name
-│   │   └── module.lua
-│   └── plugin_name.lua
-├── Makefile
-├── plugin
-│   └── plugin_name.lua
-├── README.md
-├── tests
-│   ├── minimal_init.lua
-│   └── plugin_name
-│       └── plugin_name_spec.lua
+```lua
+{
+  "jfinnis/automarks.nvim",
+  config = function()
+    require("automarks").setup()
+  end,
+}
 ```
