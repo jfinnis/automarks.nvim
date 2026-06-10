@@ -2,13 +2,13 @@
 
 Automatically sets buffer-local marks on well-known exports in your code. Open a file and jump straight to the function you care about.
 
-**Status: Work in progress.**
+**Status: Work in progress.** Adds marks 
 
 ## What it does
 
 When you open a file, automarks scans for well-known patterns and sets marks on them. Jump to any matched location with `'<mark>`.
 
-### JS/TS files (`*.ts`, `*.tsx`, `*.js`, `*.jsx`)
+### JS/TS files but mostly react router
 
 | Export | Mark |
 |--------|------|
@@ -18,13 +18,14 @@ When you open a file, automarks scans for well-known patterns and sets marks on 
 | `meta` | m |
 | `links` | c |
 
-### JSON files (`package.json`)
+### `package.json`
 
 | Key | Mark |
 |-----|------|
 | `"dependencies"` | d |
 | `"devDependencies"` | v |
 | `"overrides"` | o |
+| `"scripts"` | s |
 
 
 ## Installation

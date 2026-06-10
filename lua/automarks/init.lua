@@ -30,6 +30,7 @@ local config = {
         dependencies = "d",
         devDependencies = "v",
         overrides = "o",
+        scripts = "s",
       },
     },
   },
