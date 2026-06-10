@@ -3,14 +3,16 @@ local scanner = require("automarks.scanner")
 
 ---@class Config
 local config = {
-  -- Map of export name -> mark letter
-  -- "default" is a special case: matches "export default function"
-  marks = {
+  -- Marks set on any JS/TS file
+  global_marks = {
+    default = "d",
+  },
+  -- Marks only set on route files (detected by path)
+  route_marks = {
     loader = "l",
     action = "a",
-    default = "r",
     meta = "m",
-    links = "c", -- "l" is taken, use "c" for (mostly css) links
+    links = "c",
   },
 }
 
@@ -19,24 +21,34 @@ local M = {}
 ---@type Config
 M.config = config
 
---- Set marks for all recognized exports in a buffer.
+--- Set marks for the given name->letter map on a buffer.
 ---@param buf number Buffer handle
-M.set_marks = function(buf)
-  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-
-  -- Collect the export names we're looking for
+---@param lines string[] Buffer lines
+---@param marks table<string, string> Map of export name -> mark letter
+local function apply_marks(buf, lines, marks)
   local names = {}
-  for name, _ in pairs(M.config.marks) do
+  for name, _ in pairs(marks) do
     names[#names + 1] = name
   end
 
-  -- Single pass through the file
   local found = scanner.scan_all(lines, names)
 
-  -- Set marks for everything we found
   for name, lnum in pairs(found) do
-    local mark = M.config.marks[name]
+    local mark = marks[name]
     vim.api.nvim_buf_set_mark(buf, mark, lnum, 0, {})
+  end
+end
+
+--- Set marks on a buffer. Global marks are always set; route marks only on route files.
+---@param buf number Buffer handle
+---@param is_route boolean Whether this is a route file
+M.set_marks = function(buf, is_route)
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+
+  apply_marks(buf, lines, M.config.global_marks)
+
+  if is_route then
+    apply_marks(buf, lines, M.config.route_marks)
   end
 end
 
@@ -45,16 +57,14 @@ M.setup = function(args)
   vim.notify("[automarks] setup loaded", vim.log.levels.INFO)
   M.config = vim.tbl_deep_extend("force", M.config, args or {})
 
-  -- Create augroup with clear=true so re-sourcing doesn't duplicate
   local group = vim.api.nvim_create_augroup("AutoMarks", { clear = true })
 
   vim.api.nvim_create_autocmd("BufRead", {
     group = group,
-    pattern = "*",
+    pattern = "*.ts,*.tsx,*.js,*.jsx",
     callback = function(ev)
-      if detect.is_route_file(ev.file) then
-        M.set_marks(ev.buf)
-      end
+      local is_route = detect.is_route_file(ev.file)
+      M.set_marks(ev.buf, is_route)
     end,
   })
 end
