@@ -6,18 +6,11 @@ Automatically sets buffer-local marks on well-known exports in your code. Open a
 
 ## What it does
 
-When you open a JS/TS file, automarks sets a mark on the default export so you can jump to it instantly. For files inside a `routes/` directory, it also marks common Remix/React Router exports:
-
-**All JS/TS files:**
+When you open a JS/TS file, automarks scans for well-known exports and sets marks on them. Jump to any matched export with `'<mark>`.
 
 | Export | Mark |
 |--------|------|
 | `export default` | d |
-
-**Route files only (path contains `/routes/`):**
-
-| Export | Mark |
-|--------|------|
 | `loader` | l |
 | `action` | a |
 | `meta` | m |
