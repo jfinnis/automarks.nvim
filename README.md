@@ -2,7 +2,7 @@
 
 Automatically sets buffer-local marks on well-known exports in your code. Open a file and jump straight to the function you care about.
 
-**Status: Work in progress.** Adds marks 
+**Status: Work in progress.**
 
 ## What it does
 
