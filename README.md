@@ -6,7 +6,9 @@ Automatically sets buffer-local marks on well-known exports in your code. Open a
 
 ## What it does
 
-When you open a JS/TS file, automarks scans for well-known exports and sets marks on them. Jump to any matched export with `'<mark>`.
+When you open a file, automarks scans for well-known patterns and sets marks on them. Jump to any matched location with `'<mark>`.
+
+### JS/TS files (`*.ts`, `*.tsx`, `*.js`, `*.jsx`)
 
 | Export | Mark |
 |--------|------|
@@ -15,6 +17,14 @@ When you open a JS/TS file, automarks scans for well-known exports and sets mark
 | `action` | a |
 | `meta` | m |
 | `links` | c |
+
+### JSON files (`package.json`)
+
+| Key | Mark |
+|-----|------|
+| `"dependencies"` | d |
+| `"devDependencies"` | v |
+| `"overrides"` | o |
 
 
 ## Installation
